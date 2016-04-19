@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}EDI Tracker{% endblock %}</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" type="image/x-icon" href="{{ asset('bundles/matrixdoc/images/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('bundles/matrixdoc/images/favicon.ico') }}" type="image/x-icon" />
+
+    {% block stylesheets %}
+    <!-- Bootstrap 3.3.5 -->
+    <link href="{{ asset('bundles/matrixdoc/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{{ asset('bundles/matrixdoc/font-awesome/css/font-awesome.min.css') }}" rel = "stylesheet">
+    <!-- Ionicons -->
+    <link href="{{ asset('bundles/matrixdoc/css/ionicons.min.css') }}" rel="stylesheet">
+    <!-- Theme style -->
+    <link href="{{ asset('bundles/matrixdoc/css/AdminLTE.min.css') }}" rel="stylesheet">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link href="{{ asset('bundles/matrixdoc/css/_all-skins.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/matrixdoc/css/morris.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/matrixdoc/css/plugins/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/matrixdoc/css/plugins/jquery-jvectormap-1.2.2.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/matrixdoc/css/matrix.css') }}" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    {% endblock %}
+  </head>
+   <body class="hold-transition skin-blue sidebar-mini">
+   
+    <div class="wrapper">
+
+      <header class="main-header">
+        <!-- Logo -->
+        <a href="#" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels -->
+          <span class="logo-mini"><b>EDI</b><small>T</small></span>
+          <!-- logo for regular state and mobile devices -->
+          <span class="logo-lg"><b>EDI</b>Tracker</span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+          <!-- Sidebar toggle button-->
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+             
+              
+              <!-- User Account: style can be found in dropdown.less -->
+              <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <img src="{{ asset('bundles/matrixdoc/images/img/user2-160x160.jpg') }}" class="user-image" alt="User Image">
+                  <span class="hidden-xs">
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                          {{ app.user.fullname }}
+                        {% endif %} 
+                  </span>
+                </a>
+                <ul class="dropdown-menu">
+                  <!-- User image -->
+                  <li class="user-header">
+                    <img src="{{ asset('bundles/matrixdoc/images/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
+                    <p>
+                      {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                          {{ app.user.fullname }}
+                        {% endif %} 
+                      
+                    </p>
+                  </li>
+                  <!-- Menu Body -->
+                  {% if is_granted("ROLE_ADMIN") %}
+                    <li class="user-body">
+                      <div class="col-xs-6 text-center">
+                        <a href="#"></a>
+                      </div>
+                      <div class="col-xs-4 text-center">
+                        <a href="#"></a>
+                      </div>
+                      <div class="col-xs-6 text-center">
+                        <a href="#"></a>
+                      </div>
+                    </li>
+                    <!-- Menu Footer-->
+                    <li class="user-footer">
+                      <div class="pull-left">
+                        <a href="{{ path('matrix_edi_viewUser', {'id' : app.user.id}) }}" class="btn btn-default btn-flat">Profile</a>
+                      </div>
+                      <div class="pull-right">
+                        <a href="{{ path('fos_user_security_logout') }}" class="btn btn-default btn-flat">Sign out</a>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              {% elseif is_granted("ROLE_USER") %}
+                 <li class="user-body">
+                      <div class="col-xs-6 text-center">
+                        <a href="{{path('matrix_edi_addUser')}}"></a>
+                      </div>
+                      <div class="col-xs-4 text-center">
+                        <a href="#"></a>
+                      </div>
+                      <div class="col-xs-6 text-center">
+                        <a href="#"></a>
+                      </div>
+                    </li>
+                    <!-- Menu Footer-->
+                    <li class="user-footer">
+                      <div class="pull-left">
+                        <a href="{{ path('matrix_edi_viewUser', {'id' : app.user.id}) }}" class="btn btn-default btn-flat">Profile</a>
+                      </div>
+                      <div class="pull-right">
+                        <a href="{{ path('fos_user_security_logout') }}" class="btn btn-default btn-flat">Sign out</a>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              {% endif %}
+
+              <!-- Control Sidebar Toggle Button -->
+              <li>
+                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <!-- Left side column. contains the logo and sidebar -->
+      <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+          <!-- search form -->
+          <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+              <input type="text" name="q" class="form-control" placeholder="Search...">
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+          </form>
+
+          <ul class="sidebar-menu nav">
+            <li class="header">MAIN NAVIGATION</li>
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-fw fa-list-alt"></i> <span>EDI Matrix</span> <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{{ path('matrix_edi_homepage') }}"><i class="fa fa-circle-o text-aqua"></i> PO Based Transactions</a></li>
+                <li><a href="{{ path('matrix_edi_showOtherTrans') }}"><i class="fa fa-circle-o text-aqua"></i> Invoice Based Transactions</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="{{ path('matrix_edi_view') }}">
+                <i class="fa fa-fw fa-refresh"></i> <span>Transactions Summary</span> 
+              </a>
+            </li>
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-fw fa-book"></i>
+                <span>EDI Log</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="{{ path('matrix_edi_trans', {'doc_type':  850}) }}"><i class="fa fa-circle-o text-aqua"></i> Purchase Order</a>
+                </li>
+                <li><a href="{{ path('matrix_edi_trans', {'doc_type':  997}) }}"><i class="fa fa-circle-o text-aqua"></i> Acknowledgement</a>
+                </li>
+                <li><a href="{{ path('matrix_edi_trans', {'doc_type':  856}) }}"><i class="fa fa-circle-o text-aqua"></i> 
+                  Advance Shipment Notice</a></li>
+                <li><a href="{{ path('matrix_edi_trans', {'doc_type':  810}) }}"><i class="fa fa-circle-o text-aqua"></i> Invoice</a></li>
+                <li><a href="{{ path('matrix_edi_trans', {'doc_type':  812}) }}"><i class="fa fa-circle-o text-aqua"></i> Adjustment</a></li>
+                <li><a href="{{ path('matrix_edi_trans', {'doc_type':  846}) }}"><i class="fa fa-circle-o text-aqua"></i>
+                   Inventory Inquiry/Advice</a>
+                </li>
+                <li><a href="{{ path('matrix_edi_trans', {'doc_type':  860}) }}"><i class="fa fa-circle-o text-aqua"></i>
+                 Purchase Order Change</a></li>
+                <li><a href="{{ path('matrix_edi_trans', {'doc_type':  855}) }}"><i class="fa fa-circle-o text-aqua"></i> 
+                PO Acknowledgement</a></li>
+                <li><a href="{{ path('matrix_edi_trans', {'doc_type':  870}) }}"><i class="fa fa-circle-o text-aqua"></i> Order Status</a></li>
+                <li><a href="{{ path('matrix_edi_trans', {'doc_type':  820}) }}"><i class="fa fa-circle-o text-aqua"></i> Remit Advice</a></li>
+              </ul>
+            </li>
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-fw fa-question-circle"></i> <span>Missing Reports</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li>
+                  <a href="#"><i class="fa fa-circle-o text-red"></i> Missing Acknowledgement <i class="fa fa-angle-left pull-right"></i></a>
+                  <ul class="treeview-menu">
+                    <li><a href="{{path('matrix_edi_missingAckInbound')}}"><i class="fa fa-circle-o text-red"></i> Inbound FA </a></li>
+                    <li><a href="{{path('matrix_edi_missingAckOutbound')}}"><i class="fa fa-circle-o text-red"></i> Outbound FA </a></li>
+                  </ul>
+                </li>
+                <li><a href="{{path('matrix_edi_missingAsn')}}"><i class="fa fa-circle-o text-red"></i> Missing ASN </a></li>
+                <li><a href="{{path('matrix_edi_missingInvoice')}}"><i class="fa fa-circle-o text-red"></i> Missing Invoice </a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="{{ path('matrix_edi_docTracking') }}">
+                <i class="fa fa-fw fa-search"></i> <span>Document Tracking</span> 
+              </a>
+            </li>
+            <li>
+              <a href="{{ path('matrix_edi_rejectedOutboundTrans') }}">
+                <i class="fa fa-fw fa-exclamation-circle"></i> <span>Rejected Transmissions</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ path('matrix_edi_tpTrans') }}">
+                <i class="fa fa-fw fa-group"></i> <span>TP Transactions</span>
+              </a>
+            </li>
+            {% if is_granted("ROLE_ADMIN") %}
+              <div class="divide"></div>
+              <li>
+              <a href="{{ path('matrix_edi_viewAllUser') }}">
+                <i class="fa fa-fw fa-group"></i> <span>All Users</span>
+              </a>
+            </li>
+            <li>
+                <a href="{{path('matrix_edi_addUser')}}">
+                   <i class="fa fa-fw fa-user"></i> <span>Add User</span>
+                 </a>
+                </li>
+            {% endif %}
+            
+          </ul>
+       
+
+        </section>
+        <!-- /.sidebar -->
+      </aside>
+      <div class="content-wrapper">
+         <section class="content-header">
+          <h1>
+           {% block pageTitle %} User Information {% endblock %}
+          </h1>     
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          
+            <div class="col-md-12">
+              {% for flashMessage in app.session.flashbag.get('message') %}
+                  <div class="alert alert-success alert-dismissible"  style="width:98%;">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <p> {{ flashMessage }}</p>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="row"> 
+            <div class="col-xs-12">
+              
+                <div class="panel panel-info">
+                  <div class="panel-heading">Add User</div>
+        	 					<div class="panel-body">
+        	       			 		{{ form_start(form) }}
+        	        					<div class="form-group">
+        	               			{{ form_label(form.fullname, 'Full Name : ') }}
+        	             					<p class="inputStyle">
+        	                					{{ form_widget(form.fullname, {'attr': {'class': 'form-control', 'placeholder' : 'Full Name'}}) }}
+        	              					</p>
+                            </div>
+                            <div class="form-group">
+        	              			{{ form_label(form.username, 'User Name : ') }}
+        	              			  <p class="inputStyle">
+        	                				{{ form_widget(form.username, {'attr': {'class': 'form-control', 'placeholder' : 'User Name'}}) }}
+        	              				</p>
+                            </div>
+                            <div class="form-group">
+        	              					{{ form_label(form.username, 'Email : ') }}
+        	              					<p class="inputStyle">
+        	                				{{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'Email Address'}}) }}
+        	              					</p>
+                            </div>
+        								    <div class="form-group">    		
+        	              				{{ form_label(form.roles, ' Role : ') }}
+        	              					<p class="inputStyle">
+        	                				{{ form_widget(form.roles, {'attr': {'class': 'form-control '}}) }}
+        	              					</p>
+                            </div>
+                            <div class="form-group">
+                                  {{ form_label(form.plainPassword.first, 'Password: ') }}
+                                    <p class="inputStyle">
+                                        {{ form_widget(form.plainPassword.first, {'attr' : {'class' : 'form-control', 'placeholder' : 'Password'}}) }}
+                                    </p>
+                            </div>
+                            <div class="form-group">
+                              {{ form_label(form.plainPassword.second, 'Confirm Password: ') }}
+                                <p class="inputStyle">
+                                  {{ form_widget(form.plainPassword.second, {'attr' : {'class' : 'form-control' , 'placeholder' : 'Confirm Password'}}) }}
+                                </p>
+                            </div>
+        	              			
+        	              					{{ form_label(form.save, 'Update:') }}
+        	    							{{ form_widget(form.save, {'attr' : {'class' : 'btn btn-primary'}}) }} 
+        	    	 						<a type="button" class="btn btn-primary" href="{{ path('matrix_edi_viewAllUser') }}">Cancel</a>	  
+        								</div>
+        					
+        						{{ form_end(form) }}
+        						</form>
+        					
+        				 </div>
+                </div>
+            </div>
+
+          </div><!-- /.row -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+      <!-- Control Sidebar -->
+      <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+          <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+          <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- Home tab content -->
+          <div class="tab-pane" id="control-sidebar-home-tab">
+            <h3 class="control-sidebar-heading">Recent Activity</h3>
+            <ul class="control-sidebar-menu">
+              <li>
+                <a href="javascript::;">
+                  <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+                  <div class="menu-info">
+                    <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+                    <p>Will be 23 on April 24th</p>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript::;">
+                  <i class="menu-icon fa fa-user bg-yellow"></i>
+                  <div class="menu-info">
+                    <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
+                    <p>New phone +1(800)555-1234</p>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript::;">
+                  <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
+                  <div class="menu-info">
+                    <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
+                    <p>nora@example.com</p>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript::;">
+                  <i class="menu-icon fa fa-file-code-o bg-green"></i>
+                  <div class="menu-info">
+                    <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
+                    <p>Execution time 5 seconds</p>
+                  </div>
+                </a>
+              </li>
+            </ul><!-- /.control-sidebar-menu -->
+
+            <h3 class="control-sidebar-heading">Tasks Progress</h3>
+            <ul class="control-sidebar-menu">
+              <li>
+                <a href="javascript::;">
+                  <h4 class="control-sidebar-subheading">
+                    Custom Template Design
+                    <span class="label label-danger pull-right">70%</span>
+                  </h4>
+                  <div class="progress progress-xxs">
+                    <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript::;">
+                  <h4 class="control-sidebar-subheading">
+                    Update Resume
+                    <span class="label label-success pull-right">95%</span>
+                  </h4>
+                  <div class="progress progress-xxs">
+                    <div class="progress-bar progress-bar-success" style="width: 95%"></div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript::;">
+                  <h4 class="control-sidebar-subheading">
+                    Laravel Integration
+                    <span class="label label-warning pull-right">50%</span>
+                  </h4>
+                  <div class="progress progress-xxs">
+                    <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript::;">
+                  <h4 class="control-sidebar-subheading">
+                    Back End Framework
+                    <span class="label label-primary pull-right">68%</span>
+                  </h4>
+                  <div class="progress progress-xxs">
+                    <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
+                  </div>
+                </a>
+              </li>
+            </ul><!-- /.control-sidebar-menu -->
+
+          </div><!-- /.tab-pane -->
+
+          <!-- Settings tab content -->
+          <div class="tab-pane" id="control-sidebar-settings-tab">
+            <form method="post">
+              <h3 class="control-sidebar-heading">General Settings</h3>
+              <div class="form-group">
+                <label class="control-sidebar-subheading">
+                  Report panel usage
+                  <input type="checkbox" class="pull-right" checked>
+                </label>
+                <p>
+                  Some information about this general settings option
+                </p>
+              </div><!-- /.form-group -->
+
+              <div class="form-group">
+                <label class="control-sidebar-subheading">
+                  Allow mail redirect
+                  <input type="checkbox" class="pull-right" checked>
+                </label>
+                <p>
+                  Other sets of options are available
+                </p>
+              </div><!-- /.form-group -->
+
+              <div class="form-group">
+                <label class="control-sidebar-subheading">
+                  Expose author name in posts
+                  <input type="checkbox" class="pull-right" checked>
+                </label>
+                <p>
+                  Allow the user to show his name in blog posts
+                </p>
+              </div><!-- /.form-group -->
+
+              <h3 class="control-sidebar-heading">Chat Settings</h3>
+
+              <div class="form-group">
+                <label class="control-sidebar-subheading">
+                  Show me as online
+                  <input type="checkbox" class="pull-right" checked>
+                </label>
+              </div><!-- /.form-group -->
+
+              <div class="form-group">
+                <label class="control-sidebar-subheading">
+                  Turn off notifications
+                  <input type="checkbox" class="pull-right">
+                </label>
+              </div><!-- /.form-group -->
+              <div class="form-group">
+                <label class="control-sidebar-subheading">
+                  Delete chat history
+                  <a href="javascript::;" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
+                </label>
+              </div><!-- /.form-group -->
+            </form>
+          </div><!-- /.tab-pane -->
+        </div>
+      </aside><!-- /.control-sidebar -->
+      <!-- Add the sidebar's background. This div must be placed
+           immediately after the control sidebar -->
+      <div class="control-sidebar-bg"></div>
+
+    </div>
+
+    <!-- jQuery 2.1.4 -->
+    <script src="{{ asset('bundles/matrixdoc/js/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="{{ asset('bundles/matrixdoc/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/matrixdoc/js/plugins/select2/select2.full.min.js') }}"></script>
+    <!-- FastClick -->
+    <script src="{{ asset('bundles/matrixdoc/js/plugins/fastclick/fastclick.min.js') }}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ asset('bundles/matrixdoc/js/app.min.js') }}"></script>
+    <!-- Sparkline -->
+    <script src="{{ asset('bundles/matrixdoc/js/plugins/sparkline/jquery.sparkline.min.js') }}"></script>
+    <!-- jvectormap -->
+    <script src="{{ asset('bundles/matrixdoc/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js') }} "></script>
+    <script src="{{ asset('bundles/matrixdoc/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
+    <!-- SlimScroll 1.3.0 -->
+    <script src="{{ asset('bundles/matrixdoc/js/plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
+    <!-- ChartJS 1.0.1 -->
+    <script src="{{ asset('bundles/matrixdoc/js/plugins/chartjs/Chart.min.js') }}"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{{ asset('bundles/matrixdoc/js/dashboard2.js') }}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{{ asset('bundles/matrixdoc/js/demo.js') }}"></script>
+    
+    <script>
+      $(function () {
+        //Initialize Select2 Elements
+        $(".select2").select2();
+
+      });
+    </script>
+     <script type="text/javascript">
+    $(function (){
+      $('body').popover({
+        selector:'[data-toggle="popover"]'
+      });
+    });
+  </script>
+  <script type="text/javascript">
+    $(".table td a").popover({ 
+      container: 'body',
+      placement: 'left'
+    });
+  </script>
+ <script type="text/javascript">
+  $('body').on('hidden.bs.modal', '.modal', function () {
+    $(this).removeData('bs.modal');
+  });
+ </script>
+ <script type="text/javascript">
+  $('#confirm-delete').on('show.bs.modal', function(e) {
+       $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+       var url = $(this).find('.btn-ok').attr('href');
+       var urlParts = url.split('-');
+       var tpName = urlParts[1].replace(/%20/g, " ");
+       var tpName = tpName.replace(/%28/g, "(");
+       var tpName = tpName.replace(/%29/g, ")");
+       $('.debug-url').html('<strong>' + tpName + '</strong>');
+   });
+ </script>
+   <script type="text/javascript">
+    var url = window.location;
+    // Will only work if string in href matches with location
+    $('ul.nav a[href="'+ url +'"]').parent().addClass('active');
+
+    // Will also work for relative and absolute hrefs
+    $('ul.nav a').filter(function() {
+        return this.href == url;
+    }).parent().addClass('active').parent().parent().addClass('active');
+   </script>
+  </body>
+</html>
+
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+
+	
+    

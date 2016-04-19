@@ -1,0 +1,44 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+
+<div class="container">
+    <center><img src="{{ asset('bundles/matrixdoc/images/logo.png') }}"class="LogoLogin" /></center>
+    <div class="login">
+        
+        <h1> LOG IN</h1>
+
+            {% if error %}
+                <div class="loginError">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+        <form action="{{ path("fos_user_security_check") }}" method="post">
+            <p> <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" /> </p>
+            <p>
+                <label for="username" class="margin">{{ 'security.login.username'|trans }}</label>
+               <center> <input type="text"  id="username" name="_username" value="{{ last_username }}" required="required" placeholder = "User name" /> </center>
+            </p>
+            <p>
+                <label for="password" class="margin" >{{ 'security.login.password'|trans }}</label>
+                <center><input type="password" id="password"  name="_password"  value = "" placeholder = "Password" required="required" /></center>
+            </p>
+
+            <p class="remember_me">
+                <label>
+                    <label>
+                        <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                        <label for="remember_me" class="remember_me">{{ 'security.login.remember_me'|trans }}</label>
+                    </label>
+                </label>
+            </p>
+            <p class="submit">
+                <input type="submit"  id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
+            </p>
+        </form>
+                
+    </div>
+</div>
+
+
+{% endblock fos_user_content %}
